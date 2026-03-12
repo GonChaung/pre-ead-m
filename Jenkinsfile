@@ -9,35 +9,10 @@ pipeline {
   }
 
   stages {
-    stage('Build Frontend') {
-      steps {
-        dir('TODO/todo_frontend') {
-          sh 'node -v'
-          sh 'npm -v'
-          sh 'npm install'
-          sh 'npm run build'
-        }
-      }
-    }
-
-    stage('Build Backend') {
-      steps {
-        dir('TODO/todo_backend') {
-          sh 'npm install'
-        }
-      }
-    }
-
-    stage('Prepare Static Files') {
-      steps {
-        sh 'mkdir -p TODO/todo_backend/static'
-        sh 'rm -rf TODO/todo_backend/static/build || true'
-        sh 'cp -r TODO/todo_frontend/build TODO/todo_backend/static/'
-      }
-    }
-
     stage('Containerize') {
       steps {
+        sh 'node -v'
+        sh 'npm -v'
         sh 'docker --version'
         sh "docker build -t ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest ."
       }
